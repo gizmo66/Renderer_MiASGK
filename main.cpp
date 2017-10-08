@@ -1,9 +1,10 @@
 #include <iostream>
+#include "Rasterizer.h"
 
 using namespace std;
 
 int main() {
-    cout << "Hello, World!" << endl;
-    system("pause");
+    Rasterizer rasterizer;
+    rasterizer.render();
     return 0;
 }
