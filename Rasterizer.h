@@ -13,7 +13,7 @@ class Rasterizer {
 public:
     void render();
 
-    void saveToTga();
+    void saveImageToTga();
 
     unsigned char *getColorBuffer();
 

@@ -5,6 +5,7 @@
 #include "Triangle.h"
 
 Triangle::Triangle(Point3 *a, Point3 *b, Point3 *c) {
+    this->color = Color();
     this->a = a;
     this->b = b;
     this->c = c;

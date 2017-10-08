@@ -8,20 +8,24 @@
 
 void Rasterizer::render() {
 
-    Scene scene;
-
     auto *triangle1 = new Triangle(new Point3(-1, -1, 0), new Point3(0, 1, 0), new Point3(1, 0, 0));
     triangle1->setColor(Color::Green);
 
+    auto *triangle2 = new Triangle(new Point3(-1, 0, 0), new Point3(1, 1, 0), new Point3(1, 0, 0));
+    //trójkąt z domyślnym kolorem
+
+    Scene scene;
+    scene.add(triangle1);
+    scene.add(triangle2);
+
     setImageSize(500, 500);
     initColorBuffer();
-    scene.add(triangle1);
-    scene.render(this);
 
-    saveToTga();
+    scene.render(this);
+    saveImageToTga();
 }
 
-void Rasterizer::saveToTga() {
+void Rasterizer::saveImageToTga() {
 
     //header ma 18 bajtów (9 x 2 bajty, bo short ma 2 bajty)
     unsigned short header[9] = {
