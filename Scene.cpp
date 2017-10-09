@@ -36,14 +36,6 @@ void Scene::render(Rasterizer *pRasterizer) {
 
         Color color = triangle->getColor();
 
-        unsigned char r = color.r;
-        unsigned char g = color.g;
-        unsigned char b = color.b;
-
-        //The 4 byte entry contains 1 byte for blue, 1 byte
-        //for green, 1 byte for red, and 1 byte of attribute
-        //information, in that order. -> BGRA
-
         //TODO akolodziejek: optymalizacja1 - przeszukiwanie
         //TODO akolodziejek: culling
         //TODO akolodziejek: obcinanie
@@ -51,17 +43,31 @@ void Scene::render(Rasterizer *pRasterizer) {
         //TODO akolodziejek: bufor głębokości
         //TODO akolodziejek: krawędzie top left
         for (int x = 0; x < width; x++) {
+
+            float dy12_dx01 = dy12 * (x - x1);
+            float dy23_dx02 = dy23 * (x - x2);
+            float dy31_dx03 = dy31 * (x - x3);
+
             for (int y = 0; y < height; y++) {
-                if ((dx12) * (y - y1) - (dy12) * (x - x1) > 0 &&
-                    (dx23) * (y - y2) - (dy23) * (x - x2) > 0 &&
-                    (dx31) * (y - y3) - (dy31) * (x - x3) > 0) {
+                bool isPointInsideTriangle = (dx12) * (y - y1) - dy12_dx01 > 0 && (dx23) * (y - y2) - dy23_dx02 > 0 &&
+                                             (dx31) * (y - y3) - dy31_dx03 > 0;
+                if (isPointInsideTriangle) {
                     int index = 4 * (x * height + y);
-                    colorBuffer[index] = b;
-                    colorBuffer[index + 1] = g;
-                    colorBuffer[index + 2] = r;
-                    colorBuffer[index + 3] = 255;
+                    setColorFromTriangle(colorBuffer, color, index);
                 }
             }
         }
     }
+}
+
+void Scene::setColorFromTriangle(unsigned char *colorBuffer, Color color, int index) const {
+    //.tga format:
+    //The 4 byte entry contains 1 byte for blue, 1 byte
+    //for green, 1 byte for red, and 1 byte of attribute
+    //information, in that order. -> BGRA
+
+    colorBuffer[index] = color.b;
+    colorBuffer[index + 1] = color.g;
+    colorBuffer[index + 2] = color.r;
+    colorBuffer[index + 3] = 255;
 }

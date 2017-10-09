@@ -20,6 +20,9 @@ public:
     void render(Rasterizer *pRasterizer);
 
     void add(Triangle *triangle);
+
+    void
+    setColorFromTriangle(unsigned char *colorBuffer, Color color, int index) const;
 };
 
 #endif //RENDERER_MIASGK_SCENE_H
