@@ -8,21 +8,15 @@
 
 #include <list>
 #include "Triangle.h"
-#include "Rasterizer.h"
 
 using namespace std;
 
 class Scene {
 
 public:
-    list<Triangle *> triangles;
+    explicit Scene(list <Triangle> triangles);
 
-    void render(Rasterizer *pRasterizer);
-
-    void add(Triangle *triangle);
-
-    void
-    setColorFromTriangle(unsigned char *colorBuffer, Color color, int index) const;
+    list <Triangle> triangles;
 };
 
 #endif //RENDERER_MIASGK_SCENE_H

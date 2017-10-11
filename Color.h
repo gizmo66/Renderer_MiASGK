@@ -9,15 +9,14 @@
 class Color {
 
 public:
-    Color();
-
-    Color(int r, int g, int b);
+    Color(unsigned char r, unsigned char g, unsigned char b);
 
     explicit Color(Color *color);
 
     static const Color Black;
     static const Color Red;
     static const Color Green;
+    static const Color LightBlue;
     unsigned char r;
     unsigned char g;
     unsigned char b;

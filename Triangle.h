@@ -12,15 +12,15 @@
 class Triangle {
 
 public:
-    Triangle(Point3 *a, Point3 *b, Point3 *c);
+    Triangle(Point3 a, Point3 b, Point3 c);
 
     const Color &getColor() const;
 
     void setColor(const Color &color);
 
-    Point3 *a;
-    Point3 *b;
-    Point3 *c;
+    Point3 a;
+    Point3 b;
+    Point3 c;
 private:
     Color color = Color::Red;
 };

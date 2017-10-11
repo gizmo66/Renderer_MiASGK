@@ -5,30 +5,20 @@
 #ifndef RENDERER_MIASGK_RASTERIZER_H
 #define RENDERER_MIASGK_RASTERIZER_H
 
-
-#include "ColorBuffer.h"
+#include <iostream>
+#include "Rasterizer.h"
+#include "ModelLoader.h"
+#include "Scene.h"
+#include "Renderer.h"
 
 class Rasterizer {
 
 public:
     void render();
 
-    void saveImageToTga();
+    list<Triangle> getTriangles(Model3D &model3D) const;
 
-    unsigned char *getColorBuffer();
-
-    int getImageWidth() const;
-
-    int getImageHeight() const;
-
-private:
-    ColorBuffer colorBuffer{};
-    int imageWidth = 100;
-    int imageHeight = 100;
-
-    void setImageSize(int imageWidth, int imageHeight);
-
-    void initColorBuffer();
+    void openFile(const char *fileName);
 };
 
 

@@ -2,66 +2,39 @@
 // Created by Adam on 2017-10-08.
 //
 
-#include <cstdio>
 #include "Rasterizer.h"
-#include "Scene.h"
+
+const char *FILE_NAME = "render.tga";
 
 void Rasterizer::render() {
+    ModelLoader modelLoader;
+    Model3D *model3D = modelLoader.importFile("revolver.3DS");
+    if (model3D != nullptr) {
+        auto *scene = new Scene(getTriangles(*model3D));
+        cout << "ilosc trojkatow: " << scene->triangles.size() << endl;
 
-    auto *triangle1 = new Triangle(new Point3(-1, -1, 0), new Point3(0, 1, 0), new Point3(1, 0, 0));
-    triangle1->setColor(Color::Green);
-
-    auto *triangle2 = new Triangle(new Point3(-1, 0, 0), new Point3(1, 1, 0), new Point3(1, 0, 0));
-    //trójkąt z domyślnym kolorem
-
-    Scene scene;
-    scene.add(triangle1);
-    scene.add(triangle2);
-
-    setImageSize(500, 500);
-    initColorBuffer();
-
-    scene.render(this);
-    saveImageToTga();
+        auto renderer = Renderer(scene);
+        renderer.setImageSize(600, 600);
+        renderer.initColorBuffer();
+        renderer.render();
+        renderer.saveImageToTga(FILE_NAME);
+        openFile(FILE_NAME);
+    }
 }
 
-void Rasterizer::saveImageToTga() {
-
-    //header ma 18 bajtów (9 x 2 bajty, bo short ma 2 bajty)
-    unsigned short header[9] = {
-            0x0000, 0x0002, 0x0000, 0x0000, 0x0000, 0x0000,
-            0x0100, 0x0100, //width, height
-            0x0820
-    };
-
-    FILE *file = fopen("render.tga", "wb+");
-
-    header[6] = static_cast<unsigned short>(imageWidth);
-    header[7] = static_cast<unsigned short>(imageHeight);
-
-    fwrite(header, 2, 9, file);
-    fwrite(getColorBuffer(), 1, static_cast<size_t>(4 * imageWidth * imageHeight), file);
-
-    fclose(file);
+list<Triangle> Rasterizer::getTriangles(Model3D &model3D) const {
+    list<Triangle> triangles;
+    for (auto &object : model3D.objects) {
+        for (int i = 0; i < object.facesQuantity; i++) {
+            Vector3 a = object.vertices[object.faces[i].verticesIndexes[0]];
+            Vector3 b = object.vertices[object.faces[i].verticesIndexes[1]];
+            Vector3 c = object.vertices[object.faces[i].verticesIndexes[2]];
+            triangles.emplace_back(Point3(a.x, a.y, a.z), Point3(b.x, b.y, b.z), Point3(c.x, c.y, c.z));
+        }
+    }
+    return triangles;
 }
 
-void Rasterizer::setImageSize(int imageWidth, int imageHeight) {
-    this->imageWidth = imageWidth;
-    this->imageHeight = imageHeight;
-}
-
-void Rasterizer::initColorBuffer() {
-    colorBuffer.init(imageWidth, imageHeight);
-}
-
-unsigned char *Rasterizer::getColorBuffer() {
-    return colorBuffer.getBuffer();
-}
-
-int Rasterizer::getImageWidth() const {
-    return imageWidth;
-}
-
-int Rasterizer::getImageHeight() const {
-    return imageHeight;
+void Rasterizer::openFile(const char *fileName) {
+    ShellExecute(nullptr, nullptr, fileName, nullptr, nullptr, SW_SHOW);
 }
