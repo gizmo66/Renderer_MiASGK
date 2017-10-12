@@ -7,6 +7,7 @@
 
 
 #include <list>
+#include <vector>
 #include "Triangle.h"
 
 using namespace std;
@@ -14,9 +15,9 @@ using namespace std;
 class Scene {
 
 public:
-    explicit Scene(list <Triangle> triangles);
+    explicit Scene(vector<Triangle> triangles);
 
-    list <Triangle> triangles;
+    vector<Triangle> triangles;
 };
 
 #endif //RENDERER_MIASGK_SCENE_H
