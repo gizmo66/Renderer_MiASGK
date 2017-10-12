@@ -38,7 +38,6 @@
 
 #include <cstdio>
 #include <windows.h>
-#include <cmath>
 #include <vector>
 #include "Vector3.h"
 #include "Vector2.h"

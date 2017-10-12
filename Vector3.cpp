@@ -3,6 +3,7 @@
 //
 
 #include "Vector3.h"
+#include "Math.h"
 
 Vector3 Vector3::vectorFromTwoPoints(Vector3 point1, Vector3 point2) {
     Vector3 vector;
@@ -38,7 +39,7 @@ Vector3 Vector3::multiply(Vector3 vector2) {
 
 Vector3 Vector3::normalize() {
     double size;
-    size = sqrt(this->x * this->x + this->y * this->y + this->z * this->z);
+    size = Math::sqrt(this->x * this->x + this->y * this->y + this->z * this->z);
     Vector3 result;
     result.x /= (float) size;
     result.y /= (float) size;

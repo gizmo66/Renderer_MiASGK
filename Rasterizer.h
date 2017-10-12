@@ -16,7 +16,7 @@ class Rasterizer {
 public:
     void render();
 
-    list<Triangle> getTriangles(Model3D &model3D) const;
+    vector<Triangle> getTriangles(Model3D &model3D) const;
 
     void openFile(const char *fileName);
 };

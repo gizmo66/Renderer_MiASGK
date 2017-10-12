@@ -5,8 +5,6 @@
 #ifndef RENDERER_MIASGK_VECTOR3_H
 #define RENDERER_MIASGK_VECTOR3_H
 
-#include <cmath>
-
 class Vector3 {
 public:
     float x, y, z;

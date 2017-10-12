@@ -4,26 +4,28 @@
 
 #include "Rasterizer.h"
 
-const char *FILE_NAME = "render.tga";
+const char *MODEL_3D_FILE_NAME = "revolver.3DS";
+const char *RENDER_FILE_NAME = "render.tga";
+int IMAGE_WIDTH = 600;
+int IMAGE_HEIGHT = 600;
 
 void Rasterizer::render() {
     ModelLoader modelLoader;
-    Model3D *model3D = modelLoader.importFile("revolver.3DS");
+    Model3D *model3D = modelLoader.importFile(MODEL_3D_FILE_NAME);
     if (model3D != nullptr) {
         auto *scene = new Scene(getTriangles(*model3D));
         cout << "ilosc trojkatow: " << scene->triangles.size() << endl;
-
         auto renderer = Renderer(scene);
-        renderer.setImageSize(600, 600);
+        renderer.setImageSize(IMAGE_WIDTH, IMAGE_HEIGHT);
         renderer.initColorBuffer();
         renderer.render();
-        renderer.saveImageToTga(FILE_NAME);
-        openFile(FILE_NAME);
+        renderer.saveImageToTga(RENDER_FILE_NAME);
+        openFile(RENDER_FILE_NAME);
     }
 }
 
-list<Triangle> Rasterizer::getTriangles(Model3D &model3D) const {
-    list<Triangle> triangles;
+vector<Triangle> Rasterizer::getTriangles(Model3D &model3D) const {
+    vector<Triangle> triangles;
     for (auto &object : model3D.objects) {
         for (int i = 0; i < object.facesQuantity; i++) {
             Vector3 a = object.vertices[object.faces[i].verticesIndexes[0]];

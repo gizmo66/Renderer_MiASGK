@@ -199,7 +199,7 @@ void ModelLoader::LoadChunk(Chunk *chunk) {
     // id bloku (2 bajty)
     chunk->readBytes = fread(&chunk->id, 1, 2, file);
 
-    // d?ugo?? bloku (4 bajty)
+    // dlugosc bloku (4 bajty)
     chunk->readBytes += fread(&chunk->length, 1, 4, file);
 }
 

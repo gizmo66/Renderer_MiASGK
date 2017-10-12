@@ -14,6 +14,6 @@ set(SOURCE_FILES main.cpp
         ModelLoader.cpp ModelLoader.h
         Face.cpp Face.h
         Vector2.cpp Vector2.h
-        Vector3.cpp Vector3.h Renderer.cpp Renderer.h)
+        Vector3.cpp Vector3.h Renderer.cpp Renderer.h Math.cpp Math.h)
 
 add_executable(Renderer_MiASGK ${SOURCE_FILES})
