@@ -9,11 +9,11 @@ set(SOURCE_FILES main.cpp
         Scene.cpp Scene.h
         Color.cpp Color.h
         Triangle.cpp Triangle.h
-        Point3.cpp Point3.h
-        ColorBuffer.cpp ColorBuffer.h
         ModelLoader.cpp ModelLoader.h
         Face.cpp Face.h
         Vector2.cpp Vector2.h
-        Vector3.cpp Vector3.h Renderer.cpp Renderer.h Math.cpp Math.h)
+        Vector3.cpp Vector3.h
+        Renderer.cpp Renderer.h
+        Math.cpp Math.h)
 
 add_executable(Renderer_MiASGK ${SOURCE_FILES})

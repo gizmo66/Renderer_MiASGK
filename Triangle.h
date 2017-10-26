@@ -6,21 +6,23 @@
 #define RENDERER_MIASGK_TRIANGLE_H
 
 
-#include "Point3.h"
+#include "Vector3.h"
 #include "Color.h"
+#include "Vector3.h"
 
 class Triangle {
 
 public:
-    Triangle(Point3 a, Point3 b, Point3 c);
+    Triangle(Vector3 a, Vector3 b, Vector3 c, Vector3 normalVector);
 
     const Color &getColor() const;
 
     void setColor(const Color &color);
 
-    Point3 a;
-    Point3 b;
-    Point3 c;
+    Vector3 a;
+    Vector3 b;
+    Vector3 c;
+    Vector3 normalVector;
 private:
     Color color = Color::Red;
 };

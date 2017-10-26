@@ -4,11 +4,12 @@
 
 #include "Triangle.h"
 
-Triangle::Triangle(Point3 a, Point3 b, Point3 c) {
+Triangle::Triangle(Vector3 a, Vector3 b, Vector3 c, Vector3 normalVector) {
     this->color = Color::Red;
     this->a = a;
     this->b = b;
     this->c = c;
+    this->normalVector = normalVector;
 }
 
 const Color &Triangle::getColor() const {

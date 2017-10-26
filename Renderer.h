@@ -8,12 +8,11 @@
 #include <map>
 #include <iostream>
 #include "Scene.h"
-#include "ColorBuffer.h"
 
 class Renderer {
 private:
     Scene *scene;
-    ColorBuffer colorBuffer{};
+    unsigned char *colorBuffer{};
     int imageWidth = 100;
     int imageHeight = 100;
 public:
@@ -25,7 +24,7 @@ public:
 
     void setImageSize(int imageWidth, int imageHeight);
 
-    void setColor(unsigned char *colorBuffer, Color color, int index) const;
+    void setColor(const Color &color, int index) const;
 
     explicit Renderer(Scene *scene);
 
