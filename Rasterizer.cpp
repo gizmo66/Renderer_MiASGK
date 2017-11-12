@@ -6,15 +6,15 @@
 
 const char *MODEL_3D_FILE_NAME = "revolver.3DS";
 const char *RENDER_FILE_NAME = "render.tga";
-int IMAGE_WIDTH = 700;
-int IMAGE_HEIGHT = 700;
+int IMAGE_WIDTH = 80;
+int IMAGE_HEIGHT = 80;
 
 void Rasterizer::render() {
     ModelLoader modelLoader;
     Model3D *model3D = modelLoader.importFile(MODEL_3D_FILE_NAME);
     if (model3D != nullptr) {
         auto *scene = new Scene(getTriangles(*model3D));
-        cout << "ilosc trojkatow: " << scene->triangles.size() << endl;
+        cout << "Triangles quantity: " << scene->triangles.size() << endl;
         auto renderer = Renderer(scene);
         renderer.setImageSize(IMAGE_WIDTH, IMAGE_HEIGHT);
         renderer.initColorBuffer();

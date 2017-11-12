@@ -130,6 +130,8 @@ private:
     Chunk *tempChunk;
 
     void *buffer;
+
+    string getCurrentDirectoryOnWindows();
 };
 
 

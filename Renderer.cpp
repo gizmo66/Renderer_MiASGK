@@ -92,8 +92,8 @@ void Renderer::render() {
     auto end = chrono::system_clock::now();
     chrono::duration<double> elapsed_seconds = end - start;
 
-    cout << "elapsed time: " << elapsed_seconds.count() << "s\n";
-    cout << "Rendering ended: " << rendered << endl;
+    cout << "Elapsed time: " << elapsed_seconds.count() << "s\n";
+    cout << "Rendered triangles: " << rendered << endl;
 }
 
 void Renderer::setColor(const Color &color, int index) const {

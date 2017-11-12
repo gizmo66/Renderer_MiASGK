@@ -2,6 +2,7 @@
 // Created by Adam on 2017-10-11.
 //
 
+#include <iostream>
 #include "ModelLoader.h"
 
 ModelLoader::ModelLoader() {
@@ -9,11 +10,19 @@ ModelLoader::ModelLoader() {
     tempChunk = new Chunk;
 }
 
+string ModelLoader::getCurrentDirectoryOnWindows()
+{
+    const unsigned long maxDir = 260;
+    char currentDir[maxDir];
+    GetCurrentDirectory(maxDir, currentDir);
+    return string(currentDir);
+}
+
 Model3D *ModelLoader::importFile(const char *fileName) {
-    char message[255] = {0};
-    file = fopen(fileName, "rb"); // r - tryb odczytu; b - otworz jako plik binarny
+    string path = getCurrentDirectoryOnWindows() + "\\..\\" + fileName;
+    file = fopen(path.c_str(), "rb"); // r - tryb odczytu; b - otworz jako plik binarny
     if (!file) {
-        sprintf(message, "Nie ma takiego pliku: %s!", fileName);
+        cout << "No such file: \"" << fileName << "\"!";
         return nullptr;
     }
 
@@ -21,7 +30,7 @@ Model3D *ModelLoader::importFile(const char *fileName) {
     LoadChunk(currentChunk);
 
     if (currentChunk->id != PRIMARY) {
-        sprintf(message, "Nie mozna wczytac pliku!: %s!", fileName);
+        cout << "File cannot be loaded: \"" << fileName << "\"!";
         return nullptr;
     }
 
@@ -73,7 +82,7 @@ void ModelLoader::ReadNextChunk(Model3D *model, Chunk *previousChunk) {
                 memset(&(model->objects[model->objectsQuantity - 1]), 0, sizeof(Object));
                 currentChunk->readBytes += readString(model->objects[model->objectsQuantity - 1].name);
                 readNextObject(model, &(model->objects[model->objectsQuantity - 1]), currentChunk);
-                printf("nazwa obiektu: %s\n", model->objects[model->objectsQuantity - 1].name);
+                printf("Object name: %s\n", model->objects[model->objectsQuantity - 1].name);
                 break;
 
             case EDITKEYFRAME:
