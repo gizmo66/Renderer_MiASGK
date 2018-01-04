@@ -42,6 +42,7 @@
 #include "Vector3.h"
 #include "Vector2.h"
 #include "Face.h"
+#include <string>
 
 struct coordinates {
 

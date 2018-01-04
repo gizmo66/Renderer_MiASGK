@@ -19,10 +19,11 @@ string ModelLoader::getCurrentDirectoryOnWindows()
 }
 
 Model3D *ModelLoader::importFile(const char *fileName) {
-    string path = getCurrentDirectoryOnWindows() + "\\..\\" + fileName;
+    string path = getCurrentDirectoryOnWindows() + "\\" + fileName;
     file = fopen(path.c_str(), "rb"); // r - tryb odczytu; b - otworz jako plik binarny
     if (!file) {
-        cout << "No such file: \"" << fileName << "\"!";
+        cout << "No such file: \"" << fileName << "\"!" << endl;
+        cout << "Path: " << path << endl;
         return nullptr;
     }
 

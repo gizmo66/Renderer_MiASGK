@@ -12,23 +12,20 @@
 class Renderer {
 private:
     Scene *scene;
-    unsigned char *colorBuffer{};
     int imageWidth = 100;
     int imageHeight = 100;
 public:
     virtual ~Renderer();
 
-    void initColorBuffer();
-
-    void render();
+    double render(unsigned char *colorBuffer);
 
     void setImageSize(int imageWidth, int imageHeight);
 
-    void setColor(const Color &color, int index) const;
+    void setColor(const Color &color, int index, unsigned char *colorBuffer) const;
 
     explicit Renderer(Scene *scene);
 
-    void saveImageToTga(const char *fileName);
+    void saveImageToTga(const char *fileName, unsigned char colorBuffer[]);
 };
 
 

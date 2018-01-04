@@ -14,19 +14,8 @@ void Renderer::setImageSize(int imageWidth, int imageHeight) {
     this->imageHeight = imageHeight;
 }
 
-void Renderer::initColorBuffer() {
-    colorBuffer = new unsigned char[4 * imageWidth * imageHeight];
-
-    for (int x = 0; x < imageWidth; x++) {
-        for (int y = 0; y < imageHeight; y++) {
-            int index = 4 * (x * imageHeight + y);
-            setColor(Color::LightBlue, index);
-        }
-    }
-}
-
-void Renderer::render() {
-    cout << "Rendering started" << endl;
+double Renderer::render(unsigned char *colorBuffer) {
+    //cout << "Rendering started" << endl;
     auto start = chrono::system_clock::now();
 
     map<int, float> pixelsDepthMap;
@@ -60,8 +49,7 @@ void Renderer::render() {
 
             //TODO akolodziejek: optymalizacja1 - przeszukiwanie
             //TODO akolodziejek: obcinanie
-            //TODO akolodziejek: interpolacja
-            //TODO akolodziejek: krawędzie top left
+            //TODO akolodziejek: interpolacja koloru
             for (int x = 0; x < imageWidth; x++) {
 
                 float dy12_dx01 = dy12 * (x - x1);
@@ -72,7 +60,7 @@ void Renderer::render() {
                 for (int y = 0; y < imageHeight; y++) {
                     if (dx12 * (y - y1) - dy12_dx01 > 0 && dx23 * (y - y2) - dy23_dx02 > 0 &&
                         dx31 * (y - y3) - dy31_dx03 > 0) {
-                        int index = 4 * (x * imageHeight + y);
+                        int index = 3 * (x * imageHeight + y);
                         float lambda1 = (dy23_dx03 + dx32 * (y - y3)) / (dy23 * dx13 + dx32 * dy13);
                         float lambda2 = (dy31_dx03 + dx13 * y - y3) / (dy31 * dx23 + dx13 * dy23);
                         float lambda3 = 1 - lambda1 - lambda2;
@@ -80,7 +68,7 @@ void Renderer::render() {
                         auto i = pixelsDepthMap.find(index);
                         if (i == pixelsDepthMap.end() || i->second < depth) {
                             pixelsDepthMap[index] = depth;
-                            setColor(triangle.getColor(), index);
+                            setColor(triangle.getColor(), index, colorBuffer);
                         }
                     }
                 }
@@ -92,19 +80,18 @@ void Renderer::render() {
     auto end = chrono::system_clock::now();
     chrono::duration<double> elapsed_seconds = end - start;
 
-    cout << "Elapsed time: " << elapsed_seconds.count() << "s\n";
-    cout << "Rendered triangles: " << rendered << endl;
+    //cout << "Elapsed time: " << elapsed_seconds.count() << "s\n";
+    //cout << "Rendered triangles: " << rendered << endl;
+    return elapsed_seconds.count();
 }
 
-void Renderer::setColor(const Color &color, int index) const {
-    //format .tga -> BGRA, 1 bajt na kazdy kolor, wartosci 0-255
+void Renderer::setColor(const Color &color, int index, unsigned char *colorBuffer) const {
     colorBuffer[index] = color.b;
     colorBuffer[index + 1] = color.g;
     colorBuffer[index + 2] = color.r;
-    colorBuffer[index + 3] = 255;
 }
 
-void Renderer::saveImageToTga(const char *fileName) {
+void Renderer::saveImageToTga(const char *fileName, unsigned char colorBuffer[]) {
 
     cout << "Saving started" << endl;
 
@@ -115,7 +102,7 @@ void Renderer::saveImageToTga(const char *fileName) {
             0x0820
     };
 
-    FILE *file = fopen(fileName, "wb+");
+	FILE *file = fopen(fileName, "wb+");
 
     header[6] = static_cast<unsigned short>(imageWidth);
     header[7] = static_cast<unsigned short>(imageHeight);
