@@ -14,6 +14,7 @@ private:
     Scene *scene;
     int imageWidth = 100;
     int imageHeight = 100;
+    float width_2;
 public:
     virtual ~Renderer();
 

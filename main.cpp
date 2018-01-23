@@ -12,10 +12,9 @@ HBITMAP imageBmpOld;
 const int screenSize_X = 640;
 const int screenSize_Y = 480;
 
-const char *MODEL_3D_FILE_NAME = "revolver.3DS";
-const char *RENDER_FILE_NAME = "render.tga";
-int IMAGE_WIDTH = 80;
-int IMAGE_HEIGHT = 80;
+const char *MODEL_3D_FILE_NAME = "revolver1.3DS";
+int IMAGE_WIDTH = 300;
+int IMAGE_HEIGHT = 300;
 Model3D *model;
 
 bool finish = false;
@@ -153,7 +152,7 @@ LRESULT CALLBACK wndProc(HWND wnd, UINT msg, WPARAM w, LPARAM l) {
             LONG lParamValue = (scanCode << 16);
             int result = GetKeyNameTextW(lParamValue, name, 1024);
             if (result > 0) {
-                std::wcout << name << " pressed" << endl;
+                //std::wcout << name << " pressed" << endl;
             }
             switch (w) {
                 case VK_ESCAPE:
