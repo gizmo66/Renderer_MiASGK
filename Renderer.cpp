@@ -108,7 +108,20 @@ void Renderer::saveImageToTga(const char *fileName, unsigned char colorBuffer[])
     header[7] = static_cast<unsigned short>(imageHeight);
 
     fwrite(header, 2, 9, file);
-    fwrite(colorBuffer, 1, static_cast<size_t>(4 * imageWidth * imageHeight), file);
+
+    //TODO sprawdzić dlaczego colorBuffer zawiera same 0
+    unsigned char colorBufferWithAlpha[4 * imageWidth * imageHeight];
+    int j = 0;
+    for(int i = 0; i < 3 * imageWidth * imageHeight; i++) {
+        colorBufferWithAlpha[j] = colorBuffer[i];
+        if(i % 3 == 0) {
+            j++;
+            colorBufferWithAlpha[j] = 255;
+        }
+        j++;
+    }
+
+    fwrite(colorBufferWithAlpha, 1, static_cast<size_t>(4 * imageWidth * imageHeight), file);
 
     fclose(file);
     delete file;

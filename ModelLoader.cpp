@@ -10,8 +10,7 @@ ModelLoader::ModelLoader() {
     tempChunk = new Chunk;
 }
 
-string ModelLoader::getCurrentDirectoryOnWindows()
-{
+string ModelLoader::getCurrentDirectoryOnWindows() {
     const unsigned long maxDir = 260;
     char currentDir[maxDir];
     GetCurrentDirectory(maxDir, currentDir);
@@ -263,8 +262,9 @@ void ModelLoader::readVertices(Object *object, Chunk *previousChunk) {
 
     previousChunk->readBytes += fread(object->vertices, 1, previousChunk->length - previousChunk->readBytes, file);
 
+    float temp;
     for (int i = 0; i < object->verticesQuantity; i++) {
-        float temp = object->vertices[i].y;
+        temp = object->vertices[i].y;
 
         object->vertices[i].y = object->vertices[i].z;
         object->vertices[i].z = -temp;
