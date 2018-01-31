@@ -7,7 +7,7 @@
 
 Vector3::Vector3() = default;
 
-Vector3::Vector3(float x, float y, float z) {
+Vector3::Vector3(double x, double y, double z) {
     this->x = x;
     this->y = y;
     this->z = z;
@@ -29,7 +29,7 @@ Vector3 Vector3::add(Vector3 vector2) {
     return result;
 }
 
-Vector3 Vector3::divideByNumber(float number) {
+Vector3 Vector3::divideByNumber(double number) {
     Vector3 result{};
     result.x = this->x / number;
     result.y = this->y / number;
@@ -49,13 +49,13 @@ Vector3 Vector3::normalize() {
     double size;
     size = Math::sqrt(this->x * this->x + this->y * this->y + this->z * this->z);
     Vector3 result{};
-    result.x /= (float) size;
-    result.y /= (float) size;
-    result.z /= (float) size;
+    result.x /= size;
+    result.y /= size;
+    result.z /= size;
     return result;
 }
 
-float Vector3::dot(float x1, float y1, float z1, Vector3 vector) {
+double Vector3::dot(double x1, double y1, double z1, Vector3 vector) {
     return x1 * vector.x + y1 * vector.y + z1 * vector.z;
 }
 

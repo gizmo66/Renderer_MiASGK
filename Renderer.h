@@ -14,7 +14,7 @@ private:
     Scene *scene;
     int imageWidth = 100;
     int imageHeight = 100;
-    float width_2;
+    double width_2;
 public:
     virtual ~Renderer();
 
@@ -24,7 +24,7 @@ public:
 
     explicit Renderer(Scene *scene);
 
-    void setColor(const Color &color, int index, unsigned char *colorBuffer) const;
+    void setColor(const Color &color, int index, unsigned char *colorBuffer, double intensity) const;
 };
 
 

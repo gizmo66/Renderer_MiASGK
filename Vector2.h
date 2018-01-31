@@ -7,7 +7,7 @@
 
 class Vector2 {
 public:
-    float x, y;
+    double x, y;
 };
 
 #endif //RENDERER_MIASGK_VECTOR2_H

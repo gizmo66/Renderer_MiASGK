@@ -20,8 +20,8 @@ Model3D *model;
 bool finish = false;
 
 bool rotateModel = true;
-float moveSpeed = 0.05f;
-float rotation = 0.1f;
+double moveSpeed = 0.05f;
+double rotation = 0.1f;
 bool X = true;
 short int currentObjectId = 3;
 
@@ -104,9 +104,9 @@ void transformObject(direction direction, transformation transformation) {
             } else if (transformation == rotateObject) {
                 Vector3 *pivot = objectsToTransform[j].pivot;
 
-                float x = objectsToTransform[j].vertices[i].x;
-                float y = objectsToTransform[j].vertices[i].y;
-                float z = objectsToTransform[j].vertices[i].z;
+                double x = objectsToTransform[j].vertices[i].x;
+                double y = objectsToTransform[j].vertices[i].y;
+                double z = objectsToTransform[j].vertices[i].z;
 
                 if (direction == frontDirection) {
                     objectsToTransform[j].vertices[i].z = pivot->z + z * cos(rotation) - y * sin(rotation);

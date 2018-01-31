@@ -34,7 +34,7 @@ Model3D *ModelLoader::importFile(const char *fileName) {
         return nullptr;
     }
 
-    buffer = new unsigned char[65536 * 3 * sizeof(float)];
+    buffer = new unsigned char[65536 * 3 * sizeof(double)];
 
     auto *model = new Model3D();
     ReadNextChunk(model, currentChunk);
@@ -267,7 +267,7 @@ void ModelLoader::readVertices(Object *object, Chunk *previousChunk) {
 
     previousChunk->readBytes += fread(object->vertices, 1, previousChunk->length - previousChunk->readBytes, file);
 
-    float temp;
+    double temp;
     for (int i = 0; i < object->verticesQuantity; i++) {
         temp = object->vertices[i].y;
 
@@ -349,7 +349,7 @@ void ModelLoader::CalculateNormals(Model3D *model) {
                 }
             }
 
-            object->normals[i] = sum.divideByNumber(float(-commonVerticesQuantity));
+            object->normals[i] = sum.divideByNumber(-commonVerticesQuantity);
             object->normals[i] = object->normals[i].normalize();
             sum = zero;
             commonVerticesQuantity = 0;
