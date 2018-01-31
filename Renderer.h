@@ -24,7 +24,7 @@ public:
 
     explicit Renderer(Scene *scene);
 
-    void setColor(const Color &color, int index, unsigned char *colorBuffer) const;
+    void setColor(const Color &color, int index, unsigned char *colorBuffer, float intensity) const;
 };
 
 
