@@ -53,7 +53,8 @@ double Renderer::render(unsigned char *colorBuffer) {
             dy31 = y3 - y1;
 
             //TODO akolodziejek: interpolacja koloru
-            //TODO akolodziejek: oświetlenie w wierzchołkach
+            //TODO akolodziejek: oświetlenie w wierzchołkach / pikselach
+            //TODO akolodziejek: każdy obiekt modelu 3D w innym kolorze
 
             minX = std::min(std::min(x1, x2), x3);
             maxX = std::max(std::max(x1, x2), x3);
