@@ -18,7 +18,7 @@ private:
 public:
     virtual ~Renderer();
 
-    double render(unsigned char *colorBuffer);
+    float render(unsigned char *colorBuffer);
 
     void setImageSize(int imageWidth, int imageHeight);
 

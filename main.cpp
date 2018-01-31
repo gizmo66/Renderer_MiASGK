@@ -9,12 +9,13 @@ HDC imageDC;
 HBITMAP imageBmp;
 HBITMAP imageBmpOld;
 
-const int screenSize_X = 640;
-const int screenSize_Y = 480;
+const int screenSize_X = 450;
+const int screenSize_Y = 450;
 
+static const char *const FPS = " fps";
 const char *MODEL_3D_FILE_NAME = "revolver1.3DS";
-int IMAGE_WIDTH = 300;
-int IMAGE_HEIGHT = 300;
+int IMAGE_WIDTH = 320;
+int IMAGE_HEIGHT = 320;
 Model3D *model;
 
 bool finish = false;
@@ -333,7 +334,7 @@ int WINAPI WinMain(HINSTANCE inst, HINSTANCE prev, LPSTR cmd, int show) {
         auto renderer = Renderer(scene);
         renderer.setImageSize(IMAGE_WIDTH, IMAGE_HEIGHT);
 
-        double elapsedTime = 0, time;
+        float elapsedTime = 0.0f, time;
         string fps;
         MSG msg{};
         while (!finish) {
@@ -349,9 +350,9 @@ int WINAPI WinMain(HINSTANCE inst, HINSTANCE prev, LPSTR cmd, int show) {
                 time = renderer.render(pixels);
                 elapsedTime += time;
 
-                if (elapsedTime > 0.2f) {
-                    fps = std::to_string((int) (1.0f / time)) + " fps";
-                    elapsedTime = 0;
+                if (elapsedTime > 0.3f) {
+                    fps = std::to_string((int) (1.0f / time)) + FPS;
+                    elapsedTime = 0.0f;
                     SetWindowText(window, fps.c_str());
                 }
 
