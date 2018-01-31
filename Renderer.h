@@ -22,11 +22,9 @@ public:
 
     void setImageSize(int imageWidth, int imageHeight);
 
-    void setColor(const Color &color, int index, unsigned char *colorBuffer) const;
-
     explicit Renderer(Scene *scene);
 
-    void saveImageToTga(const char *fileName, unsigned char colorBuffer[]);
+    void setColor(const Color &color, int index, unsigned char *colorBuffer) const;
 };
 
 

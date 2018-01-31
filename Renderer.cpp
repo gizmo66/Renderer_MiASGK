@@ -54,7 +54,6 @@ double Renderer::render(unsigned char *colorBuffer) {
 
             //TODO akolodziejek: interpolacja koloru
             //TODO akolodziejek: oświetlenie w wierzchołkach / pikselach
-            //TODO akolodziejek: każdy obiekt modelu 3D w innym kolorze
 
             minX = std::min(std::min(x1, x2), x3);
             maxX = std::max(std::max(x1, x2), x3);
@@ -85,7 +84,7 @@ double Renderer::render(unsigned char *colorBuffer) {
                         i = pixelsDepthMap.find(index);
                         if (i == pixelsDepthMap.end() || i->second < lambda1 * z1 + lambda2 * z2 + lambda3 * z3) {
                             pixelsDepthMap[index] = depth;
-                            setColor(triangle.getColor(), index, colorBuffer);
+                            setColor(Color(triangle.color.r, triangle.color.g, triangle.color.b), index, colorBuffer);
                         }
                     }
                 }

@@ -39,6 +39,11 @@ Model3D *ModelLoader::importFile(const char *fileName) {
     auto *model = new Model3D();
     ReadNextChunk(model, currentChunk);
     CalculateNormals(model);
+
+    for (auto &object : model->objects) {
+        object.color = new Color(rand() % 255, rand() % 255, rand() % 255);
+    }
+
     Clean();
     return model;
 }
@@ -50,7 +55,7 @@ void ModelLoader::Clean() {
 }
 
 void ModelLoader::ReadNextChunk(Model3D *model, Chunk *previousChunk) {
-    Object newObject = {0};
+    Object newObject;
     Texture newTexture = {0};
     unsigned int version = 0;
 

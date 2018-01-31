@@ -13,18 +13,14 @@
 class Triangle {
 
 public:
-    Triangle(Vector3 a, Vector3 b, Vector3 c, Vector3 normalVector);
 
-    const Color &getColor() const;
-
-    void setColor(const Color &color);
+    Triangle(Vector3 a, Vector3 b, Vector3 c, Vector3 normalVector, Color color);
 
     Vector3 a;
     Vector3 b;
     Vector3 c;
     Vector3 normalVector;
-private:
-    Color color = Color::Red;
+    Color color;
 };
 
 

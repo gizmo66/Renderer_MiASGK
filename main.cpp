@@ -259,10 +259,6 @@ HWND createWindow(HINSTANCE inst) {
 
 using namespace std;
 
-void openFile(const char *fileName) {
-    ShellExecute(nullptr, nullptr, fileName, nullptr, nullptr, SW_SHOW);
-}
-
 vector<Triangle> getTriangles(Model3D &model) {
     vector<Triangle> triangles;
     Vector3 a, b, c, normalVector;
@@ -276,7 +272,7 @@ vector<Triangle> getTriangles(Model3D &model) {
             normalVector = Vector3::cross(Vector3::subtract(b, a), Vector3::subtract(c, a));
 
             triangles.emplace_back(Vector3(a.x, a.y, a.z), Vector3(b.x, b.y, b.z), Vector3(c.x, c.y, c.z),
-                                   normalVector);
+                                   normalVector, Color(object.color->g, object.color->r, object.color->b));
         }
     }
     return triangles;

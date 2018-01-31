@@ -42,6 +42,7 @@
 #include "Vector3.h"
 #include "Vector2.h"
 #include "Face.h"
+#include "Color.h"
 #include <string>
 
 struct coordinates {
@@ -77,6 +78,7 @@ struct Object {
     Vector2 *textureCoordinates;
     Face *faces;
     vector<short int> children;
+    Color *color;
 };
 
 struct Model3D {
