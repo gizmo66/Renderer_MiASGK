@@ -54,8 +54,6 @@ Model3D *ModelLoader::importFile(const char *fileName, bool randomObjectColor) {
 
 void ModelLoader::Clean() {
     fclose(file);
-    delete currentChunk;
-    delete tempChunk;
 }
 
 void ModelLoader::ReadNextChunk(Model3D *model, Chunk *previousChunk) {
@@ -362,4 +360,9 @@ void ModelLoader::CalculateNormals(Model3D *model) {
         delete[] tempNormals;
         delete[] normals;
     }
+}
+
+ModelLoader::~ModelLoader() {
+    delete currentChunk;
+    delete tempChunk;
 }
