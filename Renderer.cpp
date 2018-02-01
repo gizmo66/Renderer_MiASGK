@@ -25,9 +25,8 @@ void Renderer::setImageSize(int imageWidth, int imageHeight) {
     this->width_2 = imageWidth * 0.5f;
 }
 
-float Renderer::render(unsigned char *colorBuffer) {
+void Renderer::render(unsigned char *colorBuffer) {
     //cout << "Rendering started" << endl;
-    auto start = chrono::system_clock::now();
 
     map<int, float> pixelsDepthMap;
     for (const auto &triangle : scene->triangles) {
@@ -152,12 +151,8 @@ float Renderer::render(unsigned char *colorBuffer) {
         }
     }
 
-    auto end = chrono::system_clock::now();
-    elapsedSeconds = end - start;
-
     //cout << "Elapsed time: " << elapsed_seconds.count() << "s\n";
     //cout << "Rendered triangles: " << rendered << endl;
-    return elapsedSeconds.count();
 }
 
 void Renderer::setColor(const Color &color, int index, unsigned char *colorBuffer, float intensity) const {

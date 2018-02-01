@@ -1,6 +1,7 @@
 #include <Windows.h>
 #include <random>
 #include <iostream>
+#include <chrono>
 #include "ModelLoader.h"
 #include "Scene.h"
 #include "Renderer.h"
@@ -364,10 +365,13 @@ int WINAPI WinMain(HINSTANCE inst, HINSTANCE prev, LPSTR cmd, int show) {
         auto renderer = Renderer(scene);
         renderer.setImageSize(IMAGE_WIDTH, IMAGE_HEIGHT);
 
-        float elapsedTime = 0.0f, time;
+        double elapsedTime = 0.0;
+        long long int frameTime = 0;
         string fps;
         MSG msg{};
         while (!finish) {
+            auto start = chrono::system_clock::now();
+
             scene->triangles = getTriangles(*model, false);
             for (auto sphereModel : lightSpheres) {
                 vector<Triangle> sphereTriangles = getTriangles(sphereModel, true);
@@ -383,25 +387,26 @@ int WINAPI WinMain(HINSTANCE inst, HINSTANCE prev, LPSTR cmd, int show) {
                     pixel = 0;
                 }
 
-                time = renderer.render(pixels);
-                elapsedTime += time;
-
-                if (elapsedTime > 0.3f) {
-                    fps = std::to_string((int) (1.0f / time)) + FPS;
-                    elapsedTime = 0.0f;
-                    SetWindowText(window, fps.c_str());
-                }
+                renderer.render(pixels);
 
                 cleanUpImage();
-
                 imageDC = CreateCompatibleDC(nullptr);
                 imageBmp = CreateDIBSection(imageDC, &dbmi, DIB_RGB_COLORS, &bits, nullptr, 0);
                 memcpy(bits, pixels, sizeof(pixels));
                 imageBmpOld = (HBITMAP) SelectObject(imageDC, imageBmp);
-
-                InvalidateRect(window, nullptr, TRUE);
-                UpdateWindow(window);
             }
+
+            auto end = chrono::system_clock::now();
+            frameTime = (end - start).count();
+
+            elapsedTime += (frameTime / 1.0e9);
+            if (elapsedTime > 0.3) {
+                fps = std::to_string((int) (1.0e9 / frameTime)) + FPS;
+                SetWindowText(window, fps.c_str());
+                elapsedTime = 0.0;
+            }
+            InvalidateRect(window, nullptr, TRUE);
+            UpdateWindow(window);
         }
         //renderer.saveImageToTga(RENDER_FILE_NAME, pixels);
         //openFile(RENDER_FILE_NAME);
