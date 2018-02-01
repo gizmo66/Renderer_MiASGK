@@ -12,7 +12,7 @@ int rendered = 0, index;
 float tx1, ty1, tz1, tx2, ty2, tz2, tx3, ty3, tz3, dx12, dx13, dx23, dx31, dx32, dy12, dy13, dy23, dy31, dy12_dx01, dy23_dx02,
         dy31_dx03, dy23_dx03, dy23_dx13_A_dx32_dy13, dy31_dx23_A_dx13_dy23, lambda1, lambda2, lambda3, depth, minX, minY, maxX, maxY;
 map<int, float>::iterator i;
-float lightX = 0.0f, lightY = 0.0f, lightZ = 0.0f, tCenterX, tCenterY, tCenterZ, distanceFromLight1, distanceFromLight2,
+float lightX, lightY, lightZ, tCenterX, tCenterY, tCenterZ, distanceFromLight1, distanceFromLight2,
         distanceFromLight3, intensity, intensity1, intensity2, intensity3;
 
 Renderer::Renderer(Scene *scene) {
@@ -69,21 +69,42 @@ float Renderer::render(unsigned char *colorBuffer) {
             minX = std::max(minX, 0.0f);
             maxX = std::min(maxX, imageWidth - 1.0f);
 
-            distanceFromLight1 = static_cast<float>(Math::sqrt((lightX - triangle.a.x) * (lightX - triangle.a.x)
-                                                               + (lightY - triangle.a.y) * (lightY - triangle.a.y)
-                                                               + (lightZ - triangle.a.z) * (lightZ - triangle.a.z)));
+            intensity1 = 0;
+            intensity2 = 0;
+            intensity3 = 0;
 
-            distanceFromLight2 = static_cast<float>(Math::sqrt((lightX - triangle.b.x) * (lightX - triangle.b.x)
-                                                               + (lightY - triangle.b.y) * (lightY - triangle.b.y)
-                                                               + (lightZ - triangle.b.z) * (lightZ - triangle.b.z)));
+            if (!triangle.isLightMarker) {
+                for (const auto &light : scene->lights) {
+                    lightX = light.position.x;
+                    lightY = light.position.y;
+                    lightZ = light.position.z;
 
-            distanceFromLight3 = static_cast<float>(Math::sqrt((lightX - triangle.c.x) * (lightX - triangle.c.x)
-                                                               + (lightY - triangle.c.y) * (lightY - triangle.c.y)
-                                                               + (lightZ - triangle.c.z) * (lightZ - triangle.c.z)));
+                    distanceFromLight1 = static_cast<float>(Math::sqrt((lightX - triangle.a.x) * (lightX - triangle.a.x)
+                                                                       +
+                                                                       (lightY - triangle.a.y) * (lightY - triangle.a.y)
+                                                                       +
+                                                                       (lightZ - triangle.a.z) *
+                                                                       (lightZ - triangle.a.z)));
 
-            intensity1 = (1.0f / (distanceFromLight1)) * 0.3f;
-            intensity2 = (1.0f / (distanceFromLight2)) * 0.3f;
-            intensity3 = (1.0f / (distanceFromLight3)) * 0.3f;
+                    distanceFromLight2 = static_cast<float>(Math::sqrt((lightX - triangle.b.x) * (lightX - triangle.b.x)
+                                                                       +
+                                                                       (lightY - triangle.b.y) * (lightY - triangle.b.y)
+                                                                       +
+                                                                       (lightZ - triangle.b.z) *
+                                                                       (lightZ - triangle.b.z)));
+
+                    distanceFromLight3 = static_cast<float>(Math::sqrt((lightX - triangle.c.x) * (lightX - triangle.c.x)
+                                                                       +
+                                                                       (lightY - triangle.c.y) * (lightY - triangle.c.y)
+                                                                       +
+                                                                       (lightZ - triangle.c.z) *
+                                                                       (lightZ - triangle.c.z)));
+
+                    intensity1 += (1.0f / (distanceFromLight1)) * 0.1f;
+                    intensity2 += (1.0f / (distanceFromLight2)) * 0.1f;
+                    intensity3 += (1.0f / (distanceFromLight3)) * 0.1f;
+                }
+            }
 
             minY = std::min(std::min(ty1, ty2), ty3);
             maxY = std::max(std::max(ty1, ty2), ty3);
@@ -113,8 +134,12 @@ float Renderer::render(unsigned char *colorBuffer) {
                         if (i == pixelsDepthMap.end() || i->second < lambda1 * tz1 + lambda2 * tz2 + lambda3 * tz3) {
                             pixelsDepthMap[index] = depth;
 
-                            intensity = lambda1 * intensity1 + lambda2 * intensity2 + lambda3 * intensity3;
-                            if (intensity > 1.0f) {
+                            if (!triangle.isLightMarker) {
+                                intensity = lambda1 * intensity1 + lambda2 * intensity2 + lambda3 * intensity3;
+                                if (intensity > 1.0f) {
+                                    intensity = 1.0f;
+                                }
+                            } else {
                                 intensity = 1.0f;
                             }
                             setColor(Color(triangle.color.r, triangle.color.g, triangle.color.b), index, colorBuffer,

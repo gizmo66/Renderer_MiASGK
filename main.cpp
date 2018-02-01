@@ -26,6 +26,8 @@ float rotation = 0.1f;
 bool X = true;
 short int currentObjectId = 3;
 
+vector<Model3D> lightSpheres;
+
 enum direction {
     upDirection = 0,
     downDirection = 1,
@@ -260,10 +262,10 @@ HWND createWindow(HINSTANCE inst) {
 
 using namespace std;
 
-vector<Triangle> getTriangles(Model3D &model) {
+vector<Triangle> getTriangles(Model3D &model1, bool isLightMarker) {
     vector<Triangle> triangles;
     Vector3 a, b, c, normalVector;
-    for (auto &object : model.objects) {
+    for (auto &object : model1.objects) {
         for (int i = 0; i < object.facesQuantity; i++) {
             a = object.vertices[object.faces[i].verticesIndexes[0]];
             b = object.vertices[object.faces[i].verticesIndexes[1]];
@@ -273,7 +275,8 @@ vector<Triangle> getTriangles(Model3D &model) {
             normalVector = Vector3::cross(Vector3::subtract(b, a), Vector3::subtract(c, a));
 
             triangles.emplace_back(Vector3(a.x, a.y, a.z), Vector3(b.x, b.y, b.z), Vector3(c.x, c.y, c.z),
-                                   normalVector, Color(object.color->g, object.color->r, object.color->b));
+                                   normalVector, Color(object.color->g, object.color->r, object.color->b),
+                                   isLightMarker);
         }
     }
     return triangles;
@@ -303,11 +306,11 @@ BITMAPINFO initBitmap() {
     return dbmi;
 }
 
-void updateChildren() {
-    for (int i = 0; i < model->objectsQuantity; i++) {
-        for (int j = 0; j < model->objectsQuantity; j++) {
-            if (model->parentId[j] > model->parentId[i]) {
-                model->objects[i].children.push_back(model->id[j]);
+void updateChildren(Model3D &model1) {
+    for (int i = 0; i < model1.objectsQuantity; i++) {
+        for (int j = 0; j < model1.objectsQuantity; j++) {
+            if (model1.parentId[j] > model1.parentId[i]) {
+                model1.objects[i].children.push_back(model1.id[j]);
             }
         }
     }
@@ -325,12 +328,39 @@ int WINAPI WinMain(HINSTANCE inst, HINSTANCE prev, LPSTR cmd, int show) {
     HWND window = createWindow(inst);
 
     ModelLoader modelLoader;
-    model = modelLoader.importFile(MODEL_3D_FILE_NAME);
+    model = modelLoader.importFile(MODEL_3D_FILE_NAME, true);
     if (model != nullptr) {
-        updateChildren();
+        updateChildren(*model);
 
-        auto *scene = new Scene(getTriangles(*model));
+        auto *scene = new Scene(getTriangles(*model, false));
+
+        scene->lights.emplace_back(Vector3(0.0f, 0.0f, 0.0f));
+        scene->lights.emplace_back(Vector3(0.7f, 0.0f, 0.0f));
+        scene->lights.emplace_back(Vector3(-0.7f, 0.7f, 0.0f));
+
+        float deltaX, deltaY;
+        for (const auto &light : scene->lights) {
+            Model3D *sphereModel = modelLoader.importFile("sphere.3DS", false);
+            updateChildren(*sphereModel);
+
+            deltaX = sphereModel->objects[0].vertices[0].x - light.position.x;
+            deltaY = sphereModel->objects[0].vertices[0].y - light.position.y;
+
+            for (int i = 0; i < sphereModel->objects[0].verticesQuantity; i++) {
+                sphereModel->objects[0].vertices[i].x += -deltaX;
+                sphereModel->objects[0].vertices[i].y += -deltaY;
+            }
+
+            vector<Triangle> sphereTriangles = getTriangles(*sphereModel, true);
+            for (auto triangle : sphereTriangles) {
+                scene->triangles.emplace_back(triangle);
+            }
+
+            lightSpheres.emplace_back(*sphereModel);
+        }
+
         cout << "Triangles quantity: " << scene->triangles.size() << endl;
+
         auto renderer = Renderer(scene);
         renderer.setImageSize(IMAGE_WIDTH, IMAGE_HEIGHT);
 
@@ -338,7 +368,13 @@ int WINAPI WinMain(HINSTANCE inst, HINSTANCE prev, LPSTR cmd, int show) {
         string fps;
         MSG msg{};
         while (!finish) {
-            scene->triangles = getTriangles(*model);
+            scene->triangles = getTriangles(*model, false);
+            for (auto sphereModel : lightSpheres) {
+                vector<Triangle> sphereTriangles = getTriangles(sphereModel, true);
+                for (auto triangle : sphereTriangles) {
+                    scene->triangles.emplace_back(triangle);
+                }
+            }
             if (PeekMessage(&msg, window, 0, 0, PM_REMOVE)) {
                 TranslateMessage(&msg);
                 DispatchMessage(&msg);

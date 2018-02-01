@@ -95,7 +95,7 @@ public:
 
     ModelLoader();
 
-    Model3D *importFile(const char *fileName);
+    Model3D *importFile(const char *fileName, bool randomObjectColor);
 
 private:
 

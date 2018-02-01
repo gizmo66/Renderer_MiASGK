@@ -14,13 +14,14 @@ class Triangle {
 
 public:
 
-    Triangle(Vector3 a, Vector3 b, Vector3 c, Vector3 normalVector, Color color);
+    Triangle(Vector3 a, Vector3 b, Vector3 c, Vector3 normalVector, Color color, bool isLightMarker);
 
     Vector3 a;
     Vector3 b;
     Vector3 c;
     Vector3 normalVector;
     Color color;
+    bool isLightMarker;
 };
 
 

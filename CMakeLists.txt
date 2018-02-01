@@ -13,5 +13,5 @@ set(SOURCE_FILES main.cpp
         Vector2.cpp Vector2.h
         Vector3.cpp Vector3.h
         Renderer.cpp Renderer.h
-        Math.cpp Math.h)
+        Math.cpp Math.h Light.cpp Light.h)
 add_executable(Rasteryzer ${SOURCE_FILES})

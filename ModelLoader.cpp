@@ -17,7 +17,7 @@ string ModelLoader::getCurrentDirectoryOnWindows() {
     return string(currentDir);
 }
 
-Model3D *ModelLoader::importFile(const char *fileName) {
+Model3D *ModelLoader::importFile(const char *fileName, bool randomObjectColor) {
     string path = getCurrentDirectoryOnWindows() + "\\" + fileName;
     file = fopen(path.c_str(), "rb"); // r - tryb odczytu; b - otworz jako plik binarny
     if (!file) {
@@ -41,7 +41,11 @@ Model3D *ModelLoader::importFile(const char *fileName) {
     CalculateNormals(model);
 
     for (auto &object : model->objects) {
-        object.color = new Color(rand() % 255, rand() % 255, rand() % 255);
+        if (randomObjectColor) {
+            object.color = new Color(rand() % 255, rand() % 255, rand() % 255);
+        } else {
+            object.color = new Color(255, 255, 255);
+        }
     }
 
     Clean();

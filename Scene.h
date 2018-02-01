@@ -9,6 +9,7 @@
 #include <list>
 #include <vector>
 #include "Triangle.h"
+#include "Light.h"
 
 using namespace std;
 
@@ -18,6 +19,7 @@ public:
     explicit Scene(vector<Triangle> triangles);
 
     vector<Triangle> triangles;
+    vector<Light> lights;
 };
 
 #endif //RENDERER_MIASGK_SCENE_H
