@@ -5,8 +5,6 @@
 #ifndef RENDERER_MIASGK_VECTOR3_H
 #define RENDERER_MIASGK_VECTOR3_H
 
-#include "Vector3.h"
-
 class Vector3 {
 public:
     Vector3();

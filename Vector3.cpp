@@ -48,7 +48,7 @@ Vector3 Vector3::multiply(Vector3 vector2) {
 Vector3 Vector3::normalize() {
     double size;
     size = Math::sqrt(this->x * this->x + this->y * this->y + this->z * this->z);
-    Vector3 result{};
+    Vector3 result = *this;
     result.x /= (float) size;
     result.y /= (float) size;
     result.z /= (float) size;
